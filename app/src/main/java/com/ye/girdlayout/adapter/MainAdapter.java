@@ -21,11 +21,18 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
 
     Context context;
     List<Card> cards;
+    MainItemClickListener mListener;
 
-    public MainAdapter(Context context, List<Card> cards) {
+    public interface MainItemClickListener{
+        public void OnItemClick(Card itemClicked);
+    }
+
+    public MainAdapter(Context context, List<Card> cards, MainItemClickListener mListener) {
         this.context = context;
         this.cards = cards;
+        this.mListener = mListener;
     }
+
     // connent with view
     @Override
     public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -37,7 +44,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     public void onBindViewHolder(MainViewHolder holder, int position) {
         holder.textView.setText(cards.get(position).getTextCard());
 
-        Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(holder.imageView);
+        Picasso.with(context)
+                .load(cards.get(position).getUrlImage())
+                .placeholder(R.drawable.superman)
+                .error(R.drawable.superman)
+                .into(holder.imageView);
 
 
     }
@@ -47,7 +58,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         return cards.size();
     }
     // get data from view
-    public class MainViewHolder extends RecyclerView.ViewHolder{
+    public class MainViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView imageView;
         TextView textView;
 
@@ -55,8 +66,15 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.img_card);
             textView = (TextView) itemView.findViewById(R.id.text_card);
+            itemView.setOnClickListener(this);
 
         }
+
+        public void onClick(View v) {
+            mListener.OnItemClick(cards.get(getLayoutPosition()));
+        }
     }
+
+
 
 }

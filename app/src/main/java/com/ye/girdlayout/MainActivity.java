@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.ye.girdlayout.adapter.MainAdapter;
 import com.ye.girdlayout.model.Card;
@@ -11,7 +12,7 @@ import com.ye.girdlayout.model.Card;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainAdapter.MainItemClickListener {
 
     RecyclerView mRecyclerView;
     List<Card> cards = new ArrayList<>();
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         CardDataLoading();
 
-        mainAdapter = new MainAdapter(getApplicationContext(), cards);
+        mainAdapter = new MainAdapter(getApplicationContext(), cards, this);
         mRecyclerView.setAdapter(mainAdapter);
     }
 
@@ -43,6 +44,12 @@ public class MainActivity extends AppCompatActivity {
         cards.add(new Card("http://i.imgur.com/DvpvklR.png", "Wint Htat Ye"));
        // mainAdapter.notifyDataSetChanged();
 
+
+    }
+
+    @Override
+    public void OnItemClick(Card itemClicked) {
+        Toast.makeText(getApplicationContext(), itemClicked.getTextCard(), Toast.LENGTH_SHORT).show();
 
     }
 }
